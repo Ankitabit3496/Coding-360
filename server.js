@@ -2,6 +2,7 @@ const express = require('express');
 const swaggerSetup = require('./swagger/swagger-config.js');
 const { scrapeGitHubProfile } = require('./scrappers/githubscrapper.js');
 const { scrapeLeetCodeProfile } = require('./scrappers/leetcodescrapper.js');
+const { scrapeCodeforcesProfile } = require('./scrappers/codeforcesscrapper.js');
 
 const app = express();
 
@@ -79,7 +80,7 @@ app.get('/scrape/github/:username', async (req, res) => {
  * /scrape/leetcode/{username}:
  *   get:
  *     summary: Scrape LeetCode profile
- *     description: Retrieves user profile stats from LeetCode.
+ *     description: Retrieves user profile data from LeetCode.
  *     parameters:
  *       - in: path
  *         name: username
@@ -97,13 +98,13 @@ app.get('/scrape/github/:username', async (req, res) => {
  *               properties:
  *                 solvedCount:
  *                   type: string
- *                   description: Number of problems solved
+ *                   description: Number of problems solved by the user
  *                 acceptanceRate:
  *                   type: string
- *                   description: Acceptance rate
+ *                   description: Acceptance rate of the user
  *                 contributionPoints:
  *                   type: string
- *                   description: Contribution points
+ *                   description: Contribution points of the user
  *       500:
  *         description: Error scraping LeetCode profile
  */
@@ -113,6 +114,52 @@ app.get('/scrape/leetcode/:username', async (req, res) => {
         res.json(stats);
     } catch (error) {
         res.status(500).json({ error: 'Error scraping LeetCode profile' });
+    }
+});
+
+/**
+ * @swagger
+ * /scrape/codeforces/{handle}:
+ *   get:
+ *     summary: Scrape Codeforces profile
+ *     description: Retrieves user profile data from Codeforces.
+ *     parameters:
+ *       - in: path
+ *         name: handle
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Codeforces handle to scrape
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 rating:
+ *                   type: string
+ *                   description: Current rating of the user
+ *                 maxRating:
+ *                   type: string
+ *                   description: Maximum rating of the user
+ *                 rank:
+ *                   type: string
+ *                   description: Rank of the user
+ *                 contribution:
+ *                   type: string
+ *                   description: Contribution of the user
+ *       500:
+ *         description: Error scraping Codeforces profile
+ */
+app.get('/scrape/codeforces/:handle', async (req, res) => {
+    try {
+        console.log(req.params.handle);
+        const profile = await scrapeCodeforcesProfile(req.params.handle);
+        res.json(profile);
+    } catch (error) {
+        res.status(500).json({ error: 'Error scraping Codeforces profile' });
     }
 });
 

@@ -1,6 +1,7 @@
 const express = require('express');
 const swaggerSetup = require('./swagger/swagger-config.js');
 const { scrapeGitHubProfile } = require('./scrappers/githubscrapper.js');
+const { scrapeLeetCodeProfile } = require('./scrappers/leetcodescrapper.js');
 
 const app = express();
 
@@ -69,7 +70,49 @@ app.get('/scrape/github/:username', async (req, res) => {
         const profile = await scrapeGitHubProfile(req.params.username);
         res.json(profile);
     } catch (error) {
-        res.status(500).json({ error: 'Error scrapping GitHub profile' });
+        res.status(500).json({ error: 'Error scraping GitHub profile' });
+    }
+});
+
+/**
+ * @swagger
+ * /scrape/leetcode/{username}:
+ *   get:
+ *     summary: Scrape LeetCode profile
+ *     description: Retrieves user profile stats from LeetCode.
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: LeetCode username to scrape
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 solvedCount:
+ *                   type: string
+ *                   description: Number of problems solved
+ *                 acceptanceRate:
+ *                   type: string
+ *                   description: Acceptance rate
+ *                 contributionPoints:
+ *                   type: string
+ *                   description: Contribution points
+ *       500:
+ *         description: Error scraping LeetCode profile
+ */
+app.get('/scrape/leetcode/:username', async (req, res) => {
+    try {
+        const stats = await scrapeLeetCodeProfile(req.params.username);
+        res.json(stats);
+    } catch (error) {
+        res.status(500).json({ error: 'Error scraping LeetCode profile' });
     }
 });
 

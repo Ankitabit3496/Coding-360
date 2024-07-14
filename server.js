@@ -3,6 +3,7 @@ const swaggerSetup = require('./swagger/swagger-config.js');
 const { scrapeGitHubProfile } = require('./scrappers/githubscrapper.js');
 const { scrapeLeetCodeProfile } = require('./scrappers/leetcodescrapper.js');
 const { scrapeCodeforcesProfile } = require('./scrappers/codeforcesscrapper.js');
+const { scrapeCodeChefProfile } = require('./scrappers/codechefscrapper.js'); 
 
 const app = express();
 
@@ -155,11 +156,52 @@ app.get('/scrape/leetcode/:username', async (req, res) => {
  */
 app.get('/scrape/codeforces/:handle', async (req, res) => {
     try {
-        console.log(req.params.handle);
         const profile = await scrapeCodeforcesProfile(req.params.handle);
         res.json(profile);
     } catch (error) {
         res.status(500).json({ error: 'Error scraping Codeforces profile' });
+    }
+});
+
+/**
+ * @swagger
+ * /scrape/codechef/{username}:
+ *   get:
+ *     summary: Scrape CodeChef profile
+ *     description: Retrieves user profile data from CodeChef.
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: CodeChef username to scrape
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 rating:
+ *                   type: string
+ *                   description: Current rating of the user
+ *                 highestRating:
+ *                   type: string
+ *                   description: Highest rating of the user
+ *                 stars:
+ *                   type: integer
+ *                   description: Stars or rank of the user
+ *       500:
+ *         description: Error scraping CodeChef profile
+ */
+app.get('/scrape/codechef/:username', async (req, res) => {
+    try {
+        const profile = await scrapeCodeChefProfile(req.params.username);
+        res.json(profile);
+    } catch (error) {
+        res.status(500).json({ error: 'Error scraping CodeChef profile' });
     }
 });
 

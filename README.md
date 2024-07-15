@@ -1,9 +1,9 @@
 # 🚀 Coding-360 : Web Scrappers 
 
-This project involves creating web scrapers for various coding platforms like LeetCode, GitHub, Codeforces, and CodeChef. Each platform presents unique challenges due to differences in HTML structure, access restrictions, and ethical considerations.
+This project involves creating web scrappers for various coding platforms like LeetCode, GitHub, Codeforces, and CodeChef. Each platform presents unique challenges due to differences in HTML structure, access restrictions, and ethical considerations.
 
 ## demo 
-<img src="./Images/scrapperdocimg.jpg" alt="Web Scrapers" width="500"/>
+<img src="./Images/scrapperdocimg.jpg" alt="Web Scrappers" width="500"/>
 
 ## 🛠️ Tech Stack
 
